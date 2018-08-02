@@ -2,12 +2,25 @@
 // cat /tmp/trace.$!.xt
 <?php
 $str = "Xdebug";
-function ret_ord( $c )
-{
+function ret_ord( $c ) {
     return ord( $c );
 }
 
-foreach ( str_split( $str ) as $char )
-{
+if (function_exists("xdebug_start_trace")) {
+  echo "xdebug OK\n";
+  ini_set('xdebug.collect_params', 4);
+  ini_set('xdebug.collect_assignments', 1);
+  ini_set('xdebug.collect_return', 'On');
+  ini_set('xdebug.trace_format', 1);
+  ini_set('xdebug.trace_output_name', 'trace.%p.%u');
+
+  ini_set('xdebug.auto_trace', 1);
+  //xdebug_start_trace('trace-php.log', XDEBUG_TRACE_NAKED_FILENAME);
+  xdebug_start_trace();
+}
+
+foreach ( str_split( $str ) as $char ) {
     echo $char, ": ", ret_ord( $char ), "\n";
 }
+
+xdebug_stop_trace();
